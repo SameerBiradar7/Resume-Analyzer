@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Resume Analysis Results</h2>
+
+            {% if scores %}
+                <!-- Overall Score -->
+                <div class="text-center mb-5">
+                    <h4>Overall Score</h4>
+                    <div class="display-4 text-primary fw-bold">
+                        {{ scores.get('total_score', 0) }}%
+                    </div>
+                </div>
+
+                <!-- Individual Score Bars -->
+                <div class="row">
+                    {% set score_items = [
+                        ('skills_score', 'Skills Match'),
+                        ('experience_score', 'Experience Match'),
+                        ('education_score', 'Education Match'),
+                        ('structure_score', 'Resume Structure')
+                    ] %}
+
+                    {% for pair in score_items %}
+                        {% set key = pair[0] %}
+                        {% set label = pair[1] %}
+                        {% set score = scores.get(key, 0) | int %}
+
+                        {% if score < 40 %}
+                            {% set bar_class = 'bg-danger' %}
+                        {% elif score < 70 %}
+                            {% set bar_class = 'bg-warning' %}
+                        {% else %}
+                            {% set bar_class = 'bg-success' %}
+                        {% endif %}
+
+                        <div class="col-md-6 mb-4">
+                            <h5 class="fw-semibold">{{ label }}</h5>
+                            <div class="progress" style="height: 24px;">
+                                <div class="progress-bar {{ bar_class }}" role="progressbar"
+                                     styles="width: {{ score }}%;"
+                                     aria-valuenow="{{ score }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    {{ score }}%
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Feedback Section -->
+                {% if feedback %}
+                    <div class="mt-5">
+                        <h5>Recommendations</h5>
+                        <div class="alert alert-info">
+                            {{ feedback | safe }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Back Button -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-primary px-4 py-2">
+                        Analyze Another Resume
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center">
+                    No analysis results available. Please try again.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

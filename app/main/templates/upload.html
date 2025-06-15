@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Debug information -->
+    <div style="display: none;">
+        Scores available: {{ scores is defined }}
+        Feedback available: {{ feedback is defined }}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="text-center mb-4">Resume Analysis Results</h2>
+
+            {% if scores %}
+                <div class="results-section">
+                    <h3>Scores:</h3>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">
+                            Total Score: {{ scores.get('total_score', 0) }}%
+                        </li>
+                        <li class="list-group-item">
+                            Skills Match: {{ scores.get('skills_score', 0) }}%
+                        </li>
+                        <li class="list-group-item">
+                            Experience Match: {{ scores.get('experience_score', 0) }}%
+                        </li>
+                        <li class="list-group-item">
+                            Education Match: {{ scores.get('education_score', 0) }}%
+                        </li>
+                    </ul>
+
+                    {% if feedback %}
+                        <div class="feedback-section">
+                            <h3>Feedback:</h3>
+                            <div class="alert alert-info">
+                                {{ feedback }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    No analysis results available.
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                    Analyze Another Resume
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

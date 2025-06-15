@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="container-fluid py-5 bg-light text-center animate__animated animate__fadeInDown">
+    <h1 class="display-5 fw-bold text-primary">
+        <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> AI Resume Analyzer
+    </h1>
+    <p class="lead text-muted mt-2">Optimize your resume with AI-based insights</p>
+</div>
+
+<!-- Form Section -->
+<div class="container py-5">
+    <form method="POST" enctype="multipart/form-data" class="needs-validation animate__animated animate__fadeInUp" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="row g-4 align-items-start">
+            <!-- Left Column -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-briefcase-fill me-2"></i>Job Title</label>
+                    {{ form.job_title(class="form-control", required=true, placeholder="e.g. Software Developer") }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-journal-check me-2"></i>Responsibilities</label>
+                    {{ form.job_responsibilities(class="form-control", rows=3, required=true) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-hourglass-split me-2"></i>Experience</label>
+                    {{ form.job_experience(class="form-control", rows=2, required=true) }}
+                </div>
+            </div>
+
+            <!-- Center Upload -->
+            <div class="col-md-4 text-center">
+                <label class="form-label d-block mb-3 fw-semibold"><i class="bi bi-upload me-2"></i>Upload Your Resume</label>
+                <div class="custom-upload-box p-4 mb-2">
+                    <i class="bi bi-cloud-arrow-up-fill display-4 text-primary mb-2"></i>
+                    {{ form.resume(class="form-control form-control-lg", accept=".pdf,.docx", required=true) }}
+                    <div class="text-muted small mt-2">Only PDF or DOCX formats accepted.</div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-text-paragraph me-2"></i>Job Description</label>
+                    {{ form.job_description(class="form-control", rows=3, required=true) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-tools me-2"></i>Skills</label>
+                    {{ form.job_skills(class="form-control", rows=2, required=true) }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-mortarboard-fill me-2"></i>Education</label>
+                    {{ form.job_education(class="form-control", rows=2, required=true) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold">
+                <i class="bi bi-bar-chart-steps me-2"></i>Analyze Resume
+            </button>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} mt-4">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </form>
+</div>
+
+<style>
+.custom-upload-box {
+    border: 2px dashed #0d6efd;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease-in-out;
+}
+.custom-upload-box:hover {
+    background-color: #e9f2ff;
+    border-color: #0b5ed7;
+}
+</style>
+
+<script>
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})();
+</script>
+{% endblock %}
